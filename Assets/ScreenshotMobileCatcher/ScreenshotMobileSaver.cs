@@ -8,41 +8,8 @@ public class ScreenshotMobileSaver : MonoBehaviour
     public string description2= "Android: remember to set the build player settings.";
     public string description3= "iOS: watch the required changes there ";
 
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (Input.mousePosition.x < Screen.width / 3)
-            {
-                TakePictureWithNativeCamera(512);
-
-
-                // Take a screenshot and save it to Gallery/Photos
-                StartCoroutine(TakeScreenshotAndSave());
-            }
-            else
-            {
-                // Don't attempt to pick media from Gallery/Photos if
-                // another media pick operation is already in progress
-                if (NativeGallery.IsMediaPickerBusy())
-                    return;
-
-                if (Input.mousePosition.x < Screen.width * 2 / 3)
-                {
-                    // Pick a PNG image from Gallery/Photos
-                    // If the selected image's width and/or height is greater than 512px, down-scale the image
-                    PickImage(512);
-                }
-                else
-                {
-                    // Pick a video from Gallery/Photos
-                    PickVideo();
-                }
-            }
-        }
-    }
-
-    private void TakePictureWithNativeCamera(int maxSize)
+    
+    public void TakePictureWithNativeCamera(int maxSize=512)
     {
         NativeCamera.Permission permission = NativeCamera.TakePicture((path) =>
         {
@@ -53,8 +20,7 @@ public class ScreenshotMobileSaver : MonoBehaviour
         Debug.Log("Permission result: " + permission);
     }
 
-    /*
-    private void TakePictureWithNativeCameraAndShowIt(int maxSize)
+    public void TakePictureWithNativeCameraAndShowIt(int maxSize = 512)
     {
         NativeCamera.Permission permission = NativeCamera.TakePicture((path) =>
         {
@@ -66,7 +32,7 @@ public class ScreenshotMobileSaver : MonoBehaviour
         }, maxSize);
 
         Debug.Log("Permission result: " + permission);
-    }*/
+    }
 
     private void PresentPhotoFromPathOnPhone(string _path, int _maxsize)
     {
@@ -98,6 +64,12 @@ public class ScreenshotMobileSaver : MonoBehaviour
 
     }
 
+    public void SaveScreenshotToGallery()
+    {
+        // Take a screenshot and save it to Gallery/Photos
+        StartCoroutine(TakeScreenshotAndSave());
+    }
+
     private IEnumerator TakeScreenshotAndSave()
     {
         yield return new WaitForEndOfFrame();
@@ -113,19 +85,17 @@ public class ScreenshotMobileSaver : MonoBehaviour
         Destroy(ss);
     }
 
-    
-
-
-    public void ChangeStateOfList(GameObject[] arr, bool state)
+    /// <summary>
+    /// Pick a PNG image from Gallery/Photos
+    /// If the selected image's width and/or height is greater than 512px, down-scale the image
+    /// </summary>
+    /// <param name="maxSize">512</param>
+    public void PickImage(int maxSize=512)
     {
-        foreach (GameObject go in arr)
-        {
-            go.SetActive(state);
-        }
+        if (NativeGallery.IsMediaPickerBusy())
+            return;
 
-    }
-    private void PickImage(int maxSize)
-    {
+
         NativeGallery.Permission permission = NativeGallery.GetImageFromGallery((path) =>
         {
             Debug.Log("Image path: " + path);
@@ -138,8 +108,14 @@ public class ScreenshotMobileSaver : MonoBehaviour
         Debug.Log("Permission result: " + permission);
     }
 
-    private void PickVideo()
+    /// <summary>
+    /// Pick a video from Gallery/Photos
+    /// </summary>
+    public void PickVideo()
     {
+        if (NativeGallery.IsMediaPickerBusy())
+            return;
+
         NativeGallery.Permission permission = NativeGallery.GetVideoFromGallery((path) =>
         {
             Debug.Log("Video path: " + path);
