@@ -1,8 +1,31 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ShareOnline : MonoBehaviour
 {
+	private PhoneCameraUnit cameraUnit;
+	public void ShotAndShareFromCamera()
+	{
+		if (cameraUnit == null)
+			cameraUnit = FindObjectOfType<PhoneCameraUnit>();
+
+		cameraUnit.CameraShotTaken.AddListener(ShareTexture);
+		cameraUnit.TakeShot();
+	}
+
+	private void ShareTexture(Texture2D fileToShare)
+	{
+		//save temporary pic
+		string filePath = System.IO.Path.Combine(Application.temporaryCachePath, "shared img.png");
+		System.IO.File.WriteAllBytes(filePath, fileToShare.EncodeToPNG());
+
+		//share
+		new NativeShare().AddFile(filePath).SetSubject("Subject goes here").SetText("Hello world!").Share();
+
+
+		cameraUnit.CameraShotTaken.RemoveListener(ShareTexture);
+	}
+
+	/*
 	//called from unity
 	public void ScreenshotAndShareNow()
 	{
@@ -23,16 +46,7 @@ public class ShareOnline : MonoBehaviour
 		// To avoid memory leaks
 		Destroy(resultedPic); 
 	}
-
-	private void ShareTexture(Texture2D fileToShare)
-	{
-		//save temporary pic
-		string filePath = System.IO.Path.Combine(Application.temporaryCachePath, "shared img.png");
-		System.IO.File.WriteAllBytes(filePath, fileToShare.EncodeToPNG());
-
-		//share
-		new NativeShare().AddFile(filePath).SetSubject("Subject goes here").SetText("Hello world!").Share();
-	}
+	*/
 
 	public void PickImageFromGalleryAndShare(string shareText= "Subject goes here")
 	{

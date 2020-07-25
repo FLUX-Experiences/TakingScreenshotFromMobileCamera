@@ -8,7 +8,11 @@ public class ScreenshotMobileSaver : MonoBehaviour
     public string description2= "Android: remember to set the build player settings.";
     public string description3= "iOS: watch the required changes there ";
 
-    
+   
+    /// <summary>
+    /// uses NativeCamera lib
+    /// </summary>
+    /// <param name="maxSize"></param>
     public void TakePictureWithNativeCamera(int maxSize=512)
     {
         NativeCamera.Permission permission = NativeCamera.TakePicture((path) =>
@@ -20,6 +24,10 @@ public class ScreenshotMobileSaver : MonoBehaviour
         Debug.Log("Permission result: " + permission);
     }
 
+    /// <summary>
+    /// uses NativeCamera lib
+    /// </summary>
+    /// <param name="maxSize"></param>
     public void TakePictureWithNativeCameraAndShowIt(int maxSize = 512)
     {
         NativeCamera.Permission permission = NativeCamera.TakePicture((path) =>
@@ -34,6 +42,12 @@ public class ScreenshotMobileSaver : MonoBehaviour
         Debug.Log("Permission result: " + permission);
     }
 
+    /// <summary>
+    /// shows an image from the phone gallery on a canvas
+    /// uses NativeGallery
+    /// </summary>
+    /// <param name="_path"></param>
+    /// <param name="_maxsize"></param>
     private void PresentPhotoFromPathOnPhone(string _path, int _maxsize)
     {
         // Create Texture from selected image
@@ -58,12 +72,14 @@ public class ScreenshotMobileSaver : MonoBehaviour
 
         Destroy(quad, 5f);
 
-        // If a procedural texture is not destroyed manually, 
-        // it will only be freed after a scene change
+        // If a procedural texture is not destroyed manually, it will only be freed after a scene change
         Destroy(texture, 5f);
 
     }
 
+    /// <summary>
+    /// uses NativeGallery library
+    /// </summary>
     public void SaveScreenshotToGallery()
     {
         // Take a screenshot and save it to Gallery/Photos
@@ -88,6 +104,7 @@ public class ScreenshotMobileSaver : MonoBehaviour
     /// <summary>
     /// Pick a PNG image from Gallery/Photos
     /// If the selected image's width and/or height is greater than 512px, down-scale the image
+    /// uses NativeGallery
     /// </summary>
     /// <param name="maxSize">512</param>
     public void PickImage(int maxSize=512)
@@ -110,6 +127,7 @@ public class ScreenshotMobileSaver : MonoBehaviour
 
     /// <summary>
     /// Pick a video from Gallery/Photos
+    /// uses NativeGallery
     /// </summary>
     public void PickVideo()
     {
