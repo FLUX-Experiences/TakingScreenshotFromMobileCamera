@@ -8,13 +8,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/ScreenshotMobileCatcher/ScreenshotMobileSaver.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 0
+  - enabled: 1
     path: Assets/ButtonBasedScene.unity
     guid: d5de5958bee337e4bb4bd5939d7f7b1d
   - enabled: 0
     path: Assets/ButtonBasedScene_WebCam.unity
     guid: b631610c21d36f640bf234dfb7de1c7e
-  - enabled: 1
+  - enabled: 0
     path: Assets/PhoneCameraScene.unity
     guid: 82d3739f9d5d8534589a21de9c1a031e
   m_configObjects: {}
